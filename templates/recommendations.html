@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Recommendations</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <style>
+        .recipe-container {
+            border: 2px solid black;
+            margin-bottom: 20px;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-gap: 20px;
+        }
+        .recipe-container h2 {
+            margin-top: 0;
+        }
+        .image-container, .pie-plot-container, .ingredients-container, .cooking-directions-container, .nutrition-container {
+            border: 1px solid black;
+            padding: 10px;
+        }
+        .image-container img, .pie-plot-container img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        .nutrition-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 5px;
+            margin: 0 auto;
+        }
+        .recipe-info {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        .recipe-info .image-container {
+            width: 50%;
+            margin-right: 20px;
+        }
+        .recipe-info .nutrition-container {
+            width: 50%;
+        }
+    </style>
+</head>
+<body>
+    <h1>Here is your selected recipe and a couple more that might interest you!</h1> <!-- Heading for the page indicating the purpose -->
+
+    {% if recipe_info %} <!-- Check if recipe information is available -->
+        {% for recipe in recipe_info %} <!-- Loop through each recipe in the recipe_info list -->
+            <div class="recipe-container">
+                <div class="recipe-info">
+                    <div class="image-container">
+                        <h2>{{ recipe.recipe_name }}</h2> <!-- Display the recipe name -->
+                        <img src="{{ recipe.image_url }}" alt="{{ recipe.recipe_name }}"> <!-- Display the recipe image -->
+                    </div>
+                    <div class="nutrition-container">
+                        <h3>Nutritional Information:</h3> <!-- Heading for the nutritional information section -->
+                        <p>Calories: {{ recipe.calories }}</p> <!-- Display the calories of the recipe -->
+                        <p>Fat: {{ recipe.fat }}</p> <!-- Display the fat content of the recipe -->
+                        <p>Carbohydrates: {{ recipe.carbohydrates }}</p> <!-- Display the carbohydrate content of the recipe -->
+                        <p>Protein: {{ recipe.protein }}</p> <!-- Display the protein content of the recipe -->
+                    </div>
+                </div>
+                <div class="pie-plot-container">
+                    <img src="{{ recipe.pie_plot_url }}" alt="Pie Plot - {{ recipe.recipe_name }}"> <!-- Display the pie plot of the recipe -->
+                </div>
+                <div class="ingredients-container">
+                    <h3>Ingredients:</h3> <!-- Heading for the ingredients section -->
+                    <p>{{ recipe.ingredients_list|replace('^', ', ') }}</p> <!-- Display the ingredients list -->
+                </div>
+                <div class="cooking-directions-container">
+                    <h3>Cooking Directions:</h3> <!-- Heading for the cooking directions section -->
+                    <p>{{ recipe.cooking_directions.directions }}</p> <!-- Display the cooking directions -->
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No recipe information found.</p> <!-- Message displayed when no recipe information is available -->
+    {% endif %}
+
+    <a href="/">Back to Home</a> <!-- Link to go back to the home page -->
+</body>
+</html>

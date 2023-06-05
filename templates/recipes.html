@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Filtered Recipes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}"> <!-- Link to external CSS file -->
+    <style>
+        h1 {
+            color: darkorange;
+            text-align: center;
+            text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 black;
+        }
+    </style>
+</head>
+<body>
+    <h1>Select a Recipe</h1> <!-- Heading for the page indicating the purpose -->
+
+    {% if recipes %} <!-- Check if there are recipes to display -->
+        <div class="recipe-container">
+            {% for recipe in recipes %} <!-- Loop through each recipe in the recipes list -->
+                <a href="/recommendations?recipe_id={{ recipe['recipe_id'] }}"> <!-- Link to the recommendations page for the specific recipe -->
+                    <div class="recipe-card">
+                        <h3 class="recipe-name">{{ recipe['recipe_name'] }}</h3> <!-- Display the recipe name -->
+                        <div class="recipe-image">
+                            <img src="{{ recipe['image_url'] }}" alt="{{ recipe['recipe_name'] }}"> <!-- Display the recipe image -->
+                        </div>
+                        <div class="pie-plot">
+                            <img src="{{ recipe['pie_plot_url'] }}" alt="Nutritional Composition - {{ recipe['recipe_name'] }}"> <!-- Display the pie plot of nutritional composition -->
+                        </div>
+                        <div class="nutrition-info">
+                            <p>Calories: {{ recipe['calories'] }}</p> <!-- Display the calories of the recipe -->
+                            <p>Protein: {{ recipe['protein'] }}g</p> <!-- Display the protein content of the recipe -->
+                            <p>Fat: {{ recipe['fat'] }}g</p> <!-- Display the fat content of the recipe -->
+                            <p>Carbohydrates: {{ recipe['carbohydrates'] }}g</p> <!-- Display the carbohydrate content of the recipe -->
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No recipes found.</p> <!-- Message displayed when no recipes match the filters -->
+    {% endif %}
+
+    <a href="/">Back to Home</a> <!-- Link to go back to the home page -->
+</body>
+</html>
