@@ -91,7 +91,7 @@ def generate_pie_plot(recipe_id):
 
     # Save the pie plot image to a file
     pie_plot_path = f'static/images/pie_plot_{recipe_id}.png'  # Modify the file name as per your requirement
-    plt.savefig(pie_plot_path)
+    plt.savefig(pie_plot_path, transparent=True)
     plt.close()  # Close the plot to release memory resources
 
     return pie_plot_path

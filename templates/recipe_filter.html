@@ -82,18 +82,6 @@
         .form-group input[type="submit"]:hover {
             background-color: #FF8C00;
         }
-
-        /* CSS styles for the login and register links */
-        .login-register-links {
-            text-align: center;
-            margin-top: 20px;
-            color: #000000;
-        }
-
-        /* CSS styles for the login and register links on hover */
-        .login-register-links a:hover {
-            color: #FF8C00;
-        }
         /* CSS styles for the profile button */
         .profile-button {
             position: absolute;
@@ -114,7 +102,7 @@
                 <a class="profile-button" href="{{ url_for('profile') }}">Profile</a>
             </nav>
             <h1>Recipe Filter</h1>
-            <form action="/" method="POST"> <!-- Form with action and method attributes -->
+            <form action="/recipe-filter" method="POST"> <!-- Form with action and method attributes -->
                 <div class="form-group">
                     <label for="calories_min">Minimum Calories:</label> <!-- Label for the minimum calories input field -->
                     <input type="number" name="calories_min" id="calories_min" required> <!-- Input field for the minimum calories -->
@@ -131,9 +119,6 @@
                     <input type="submit" value="Filter Recipes"> <!-- Submit button for filtering recipes -->
                 </div>
             </form>
-            <div class="login-register-links">
-                <a href="{{ url_for('login') }}">Login</a> --- <a href="{{ url_for('register') }}">Register</a> <!-- Links to the login and register pages -->
-            </div>
         </div>
     </div>
 </body>

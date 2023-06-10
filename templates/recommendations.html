@@ -6,82 +6,143 @@
     <style>
         .recipe-container {
             border: 2px solid black;
-            margin-bottom: 20px;
+            margin: 20px;
             padding: 20px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-gap: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            position: relative; /* Added position relative for the container */
         }
         .recipe-container h2 {
             margin-top: 0;
-        }
-        .image-container, .pie-plot-container, .ingredients-container, .cooking-directions-container, .nutrition-container {
-            border: 1px solid black;
-            padding: 10px;
-        }
-        .image-container img, .pie-plot-container img {
-            max-width: 100%;
-            height: auto;
-            display: block;
-            margin: 0 auto;
-        }
-        .nutrition-container {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 5px;
-            margin: 0 auto;
+            align-items: center; /* Align items vertically */
         }
         .recipe-info {
             display: flex;
             flex-wrap: wrap;
+            gap: 20px;
         }
-        .recipe-info .image-container {
-            width: 50%;
-            margin-right: 20px;
+        .recipe-info .title-container {
+            width: 30%;
         }
-        .recipe-info .nutrition-container {
-            width: 50%;
+        .image-container,
+        .pie-plot-container {
+            flex-grow: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .image-container img,
+        .pie-plot-container img {
+            max-width: 100%;
+            height: auto;
+        }
+        .nutrition-container,
+        .ingredients-container,
+        .cooking-directions-container {
+            border: 1px solid black;
+            padding: 10px;
+        }
+        .nutrition-container {
+            flex-grow: 1;
+        }
+        h1 {
+            margin: 20px; /* Set the margin value to match the recipe container */
+        }
+        .favorite-button {
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            font-size: 40px; /* Adjusted the font size for the star */
+            margin-right: 10px; /* Add margin to separate the star from the recipe name */
+        }
+        .favorite-button:hover::after {
+            position: absolute;
+            top: -40px;
+            left: -20px;
+            width: 200px;
+            background-color: black;
+            color: white;
+            padding: 5px;
+            border-radius: 5px;
+            font-size: 12px;
         }
     </style>
 </head>
 <body>
-    <h1>Here is your selected recipe and a couple more that might interest you!</h1> <!-- Heading for the page indicating the purpose -->
+    <h1>Selected Recipe:</h1> <!-- Heading for the selected recipe -->
 
-    {% if recipe_info %} <!-- Check if recipe information is available -->
-        {% for recipe in recipe_info %} <!-- Loop through each recipe in the recipe_info list -->
-            <div class="recipe-container">
-                <div class="recipe-info">
-                    <div class="image-container">
-                        <h2>{{ recipe.recipe_name }}</h2> <!-- Display the recipe name -->
-                        <img src="{{ recipe.image_url }}" alt="{{ recipe.recipe_name }}"> <!-- Display the recipe image -->
-                    </div>
-                    <div class="nutrition-container">
-                        <h3>Nutritional Information:</h3> <!-- Heading for the nutritional information section -->
-                        <p>Calories: {{ recipe.calories }}</p> <!-- Display the calories of the recipe -->
-                        <p>Fat: {{ recipe.fat }}</p> <!-- Display the fat content of the recipe -->
-                        <p>Carbohydrates: {{ recipe.carbohydrates }}</p> <!-- Display the carbohydrate content of the recipe -->
-                        <p>Protein: {{ recipe.protein }}</p> <!-- Display the protein content of the recipe -->
-                    </div>
+    {% if recipe_info %}
+        <div class="recipe-container">
+            <form action="/favorite" method="POST">
+                <input type="hidden" name="recipeId" value="{{ recipe_info[0].recipe_id }}">
+                <button type="submit" class="favorite-button" title="Favorite this recipe">☆</button>
+            </form>
+            <h2>{{ recipe_info[0].recipe_name }}</h2>
+            <div class="recipe-info">
+                <div class="image-container">
+                    <img src="{{ recipe_info[0].image_url }}" alt="{{ recipe_info[0].recipe_name }}">
                 </div>
                 <div class="pie-plot-container">
-                    <img src="{{ recipe.pie_plot_url }}" alt="Pie Plot - {{ recipe.recipe_name }}"> <!-- Display the pie plot of the recipe -->
+                    <img src="{{ recipe_info[0].pie_plot_url }}" alt="Pie Plot - {{ recipe_info[0].recipe_name }}">
+                </div>
+            </div>
+            <div class="nutrition-container">
+                <h3>Nutritional Information:</h3>
+                <p>Calories: {{ recipe_info[0].calories }}</p>
+                <p>Fat: {{ recipe_info[0].fat }}g</p>
+                <p>Carbohydrates: {{ recipe_info[0].carbohydrates }}g</p>
+                <p>Protein: {{ recipe_info[0].protein }}g</p>
+            </div>
+            <div class="ingredients-container">
+                <h3>Ingredients:</h3>
+                <p>{{ recipe_info[0].ingredients_list|replace('^', ', ') }}</p>
+            </div>
+            <div class="cooking-directions-container">
+                <h3>Cooking Directions:</h3>
+                <p>{{ recipe_info[0].cooking_directions.directions }}</p>
+            </div>
+        </div>
+
+        <h1 class="recommendations-heading">Recommendations:</h1> <!-- Heading for the recommendations -->
+
+        {% for recipe in recipe_info[1:] %} <!-- Loop through the remaining recipes -->
+            <div class="recipe-container" data-recipe-id="{{ recipe.recipe_id }}">
+                <form action="/favorite" method="POST">
+                    <input type="hidden" name="recipeId" value="{{ recipe.recipe_id }}">
+                    <button type="submit" class="favorite-button" title="Favorite this recipe, and view it later in your user profile">☆</button>
+                </form>
+                <h2>{{ recipe.recipe_name }}</h2>
+                <div class="recipe-info">
+                    <div class="image-container">
+                        <img src="{{ recipe.image_url }}" alt="{{ recipe.recipe_name }}">
+                    </div>
+                    <div class="pie-plot-container">
+                        <img src="{{ recipe.pie_plot_url }}" alt="Pie Plot - {{ recipe.recipe_name }}">
+                    </div>
+                </div>
+                <div class="nutrition-container">
+                    <h3>Nutritional Information:</h3>
+                    <p>Calories: {{ recipe.calories }}</p>
+                    <p>Fat: {{ recipe.fat }}g</p>
+                    <p>Carbohydrates: {{ recipe.carbohydrates }}g</p>
+                    <p>Protein: {{ recipe.protein }}g</p>
                 </div>
                 <div class="ingredients-container">
-                    <h3>Ingredients:</h3> <!-- Heading for the ingredients section -->
-                    <p>{{ recipe.ingredients_list|replace('^', ', ') }}</p> <!-- Display the ingredients list -->
+                    <h3>Ingredients:</h3>
+                    <p>{{ recipe.ingredients_list|replace('^', ', ') }}</p>
                 </div>
                 <div class="cooking-directions-container">
-                    <h3>Cooking Directions:</h3> <!-- Heading for the cooking directions section -->
-                    <p>{{ recipe.cooking_directions.directions }}</p> <!-- Display the cooking directions -->
+                    <h3>Cooking Directions:</h3>
+                    <p>{{ recipe.cooking_directions.directions }}</p>
                 </div>
             </div>
         {% endfor %}
     {% else %}
-        <p>No recipe information found.</p> <!-- Message displayed when no recipe information is available -->
+        <p>No recipe information found.</p>
     {% endif %}
 
-    <a href="/">Back to Home</a> <!-- Link to go back to the home page -->
+    <a href="/">Back to Home</a>
 </body>
 </html>

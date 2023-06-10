@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <h1>Welcome, {{ username }}!</h1>
+
+    <h2>Your Favorite Recipes:</h2>
+
+    {% if favorite_recipes %}
+        <div class="recipe-container">
+            {% for recipe in favorite_recipes %}
+                <div class="recipe-card">
+                    <h3 class="recipe-name">{{ recipe.recipe_name }}</h3>
+                    <div class="recipe-image">
+                        <img src="{{ recipe.image_url }}" alt="{{ recipe.recipe_name }}">
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p>No favorite recipes found.</p>
+    {% endif %}
+
+</body>
+</html>
