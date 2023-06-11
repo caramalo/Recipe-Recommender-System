@@ -82,16 +82,25 @@
         .form-group input[type="submit"]:hover {
             background-color: #FF8C00;
         }
-        /* CSS styles for the profile button */
-        .profile-button {
+
+        /* CSS styles for the profile button and logout button */
+        .profile-button, .logout-button {
             position: absolute;
             top: 10px;
-            right: 10px;
             text-decoration: none;
             color: white;
             background-color: #333;
             padding: 10px 15px;
             border-radius: 5px;
+        }
+
+        .profile-button {
+        right: 100px;
+        }
+
+        .logout-button {
+        right: 10px;
+        margin-right: 5px; /* Add this line to reduce the margin between buttons */
         }
     </style>
 </head>
@@ -100,6 +109,7 @@
         <div class="container">
             <nav>
                 <a class="profile-button" href="{{ url_for('profile') }}">Profile</a>
+                <a class="logout-button" href="{{ url_for('logout') }}">Logout</a>
             </nav>
             <h1>Recipe Filter</h1>
             <form action="/recipe-filter" method="POST"> <!-- Form with action and method attributes -->

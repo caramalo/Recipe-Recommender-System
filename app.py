@@ -222,5 +222,12 @@ def favorite():
     return redirect(request.referrer)
 
 
+@app.route('/logout')
+def logout():
+    # Clear the session and redirect to the home page
+    session.clear()
+    return redirect(url_for('home'))
+
+
 if __name__ == '__main__':
     app.run()
